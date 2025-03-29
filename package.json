@@ -1,0 +1,24 @@
+{
+  "name": "godot-editor-icon-viewer",
+  "version": "1.0.0",
+  "description": "This tool is designed to present all the Godot editor icons in filterable and easy-to-browse manner.",
+  "type": "module",
+  "author": "samanime",
+  "license": "MIT",
+  "config": {
+    "port": 8000,
+    "godot": {
+      "commit": "master",
+      "repo_path": "godot",
+      "icons_path": "editor/icons"
+    }
+  },
+  "scripts": {
+    "start": "npm run serve",
+    "serve": "node --no-warnings server/",
+    "icons:update": "node --no-warnings bin/generate-manifest.node.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
