@@ -88,7 +88,6 @@ const applyFilter = filter => {
     icon.classList.toggle('hide', hide);
   }
 
-  console.log('apply');
   searchInput.value = filter;
   searchInfo.textContent = `Showing ${count} of ${iconsTotal}`;
 };
@@ -146,6 +145,8 @@ const showToast = text => {
 
   clearButton.addEventListener('click', () => {
     searchInput.value = '';
+    applyColor(false, DEFAULT_COLOR, DEFAULT_BACKGROUND);
+    applyBackgroundColor(DEFAULT_BACKGROUND);
     applyFilter('');
   });
 
