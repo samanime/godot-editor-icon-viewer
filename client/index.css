@@ -16,10 +16,14 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  padding: 24px 60px;
+  padding: 24px 60px 16px 60px;
   max-width: 1200px;
   max-height: 100vh;
   gap: 16px;
+}
+
+h1 {
+  margin: 0;
 }
 
 button {
@@ -44,7 +48,6 @@ header {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 24px 0;
 }
 
 #colors {
@@ -64,6 +67,8 @@ header {
 }
 
 #search {
+  --line-height: 40px;
+
   display: flex;
   gap: 8px;
 }
@@ -71,7 +76,7 @@ header {
 #search input {
   flex: 1;
   font-size: 20px;
-  line-height: 40px;
+  line-height: var(--line-height);
   padding: 0 8px;
   border-radius: var(--border-radius);
 }
@@ -80,9 +85,16 @@ header {
   display: none;
 }
 
+#search-info {
+  flex: 0 0 200px;
+  line-height: var(--line-height);
+}
+
 #icons {
   flex: 1;
   overflow: auto;
+  border: solid #666;
+  border-width: 2px 0;
 }
 
 #icons-list {
@@ -163,6 +175,50 @@ header {
 
 #icons-list li:hover > span {
   padding-bottom: 0;
+}
+
+#footer ul {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 0;
+  margin: 0 0 8px;
+}
+
+#footer li {
+  list-style: none;
+  display: inline;
+}
+
+#footer li a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#footer .icon a {
+  display: block;
+  line-height: 24px;
+  padding-left: 28px;
+  position: relative;
+  background: no-repeat left center;
+  background-size: contain;
+}
+
+#footer .icon a:hover {
+  text-decoration: underline;
+}
+
+#footer .icon.github a {
+  background-image: url("https://raw.githubusercontent.com/rdimascio/icons/refs/heads/master/icons/github.svg");
+}
+
+#footer .icon.godot a {
+  background-image: url("../godot/icon.svg");
+}
+
+#footer #copyright {
+  font-size: 12px;
+  text-align: center;
 }
 
 #toast {

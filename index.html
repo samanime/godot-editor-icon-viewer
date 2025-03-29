@@ -6,13 +6,14 @@
 </head>
 <body>
   <header>
-    <img src="godot/icon.svg" height="100">
+    <img src="godot/icon.svg" height="60">
     <h1>Godot Editor Icon Viewer</h1>
   </header>
   <div id="search">
     <label for="search-bar">Search</label>
     <input id="search-bar" placeholder="Search for icons...">
     <button type="button" id="clear">Clear</button>
+    <span id="search-info">Showing 999 of 999 icons</span>
   </div>
   <div id="colors">
     <section>
@@ -30,6 +31,15 @@
   </div>
   <div id="icons">
     <ul id="icons-list"></ul>
+  </div><div id="footer">
+    <div>
+      <ul>
+        <li class="icon godot"><a href="https://godotengine.org/">Godot Engine</a></li>
+        <li class="icon github"><a href="https://github.com/godotengine/godot">Godot on GitHub</a></li>
+        <li class="icon github"><a href="https://github.com/samanime/godot-editor-icon-viewer">Viewer source on GitHub</a></li>
+      </ul>
+    </div>
+    <div id="copyright">Icons copyright &copy; Godot</div>
   </div>
   <div id="toast">TEMPLATE TEXT</div>
   <template id="icon-template">

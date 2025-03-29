@@ -1,6 +1,7 @@
 import manifest from '../manifest.json' with { type: 'json' }
 
 const { icons } = manifest;
+const iconsTotal = Object.keys(icons).length;
 
 const PARAM_COLOR = 'color';
 const PARAM_BACKGROUND = 'background';
@@ -9,7 +10,9 @@ const PARAM_FILTER = 'filter';
 const DEFAULT_COLOR = '#000000';
 const DEFAULT_BACKGROUND = '#AAAAAA'; // must be 6-digit hex
 
-const searchElement = document.querySelector('#search');
+const searchInput = document.querySelector('#search-bar');
+const clearButton = document.querySelector('#clear');
+const searchInfo = document.querySelector('#search-info');
 const iconsList = document.querySelector('#icons-list');
 const overrideColorElement = document.querySelector('#override-color');
 const colorElement = document.querySelector('#color');
@@ -78,9 +81,15 @@ const applyFilter = filter => {
   setQueryParam('filter', filter);
   const trimmed = filter.trim().toLowerCase();
 
+  let count = 0;
   for (const icon of iconsList.children) {
-    icon.classList.toggle('hide', trimmed && !icon.name.toLowerCase().includes(trimmed));
+    const hide = trimmed && !icon.name.toLowerCase().includes(trimmed);
+    count += hide ? 0 : 1;
+    icon.classList.toggle('hide', hide);
   }
+
+  console.log('apply filter');
+  searchInfo.textContent = `Showing ${count} of ${iconsTotal}`;
 };
 
 const applyBackgroundColor = color => {
@@ -119,11 +128,10 @@ const showToast = text => {
   applyColor(Boolean(color), color ? `#${color}` : DEFAULT_COLOR);
   applyBackgroundColor(backgroundColor ? `#${backgroundColor}` : DEFAULT_BACKGROUND);
 
+  buildIcons(iconsList);
   applyFilter(getQueryParam(PARAM_FILTER) || '');
 
-  buildIcons(iconsList);
-
-  searchElement.addEventListener('input',
+  searchInput.addEventListener('input',
     ({ target: { value } }) => { applyFilter(value); });
 
   overrideColorElement.addEventListener('change',
@@ -134,6 +142,11 @@ const showToast = text => {
 
   backgroundColorElement.addEventListener('input',
     ({ target: { value } }) => { applyBackgroundColor(value); });
+
+  clearButton.addEventListener('click', () => {
+    searchInput.value = '';
+    applyFilter('');
+  });
 
   iconsList.addEventListener('click', async ({ target }) => {
     const item = target.closest('.icon');
