@@ -88,7 +88,8 @@ const applyFilter = filter => {
     icon.classList.toggle('hide', hide);
   }
 
-  console.log('apply filter');
+  console.log('apply');
+  searchInput.value = filter;
   searchInfo.textContent = `Showing ${count} of ${iconsTotal}`;
 };
 
