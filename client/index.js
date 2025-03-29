@@ -138,7 +138,7 @@ const showToast = text => {
     ({ target: { checked } }) => { applyColor(checked, colorElement.value); })
 
   colorElement.addEventListener('input',
-    ({ target: { value } }) => { applyColor(overrideColorElement.checked, value); });
+    ({ target: { value } }) => { applyColor(true, value); });
 
   backgroundColorElement.addEventListener('input',
     ({ target: { value } }) => { applyBackgroundColor(value); });
