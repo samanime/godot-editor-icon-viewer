@@ -59,6 +59,7 @@ const manifest = {
       [basename(file, extname(file))]: {
         path: pathToFileURL(join(ICONS_DIR, file)).toString()
           .replace(pathToFileURL(PROJECT_ROOT).toString(), '')
+          .slice(1) // remove the starting slash so it'll be relative
       }
     }),
     {}
