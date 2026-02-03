@@ -2,6 +2,10 @@
 
 This tool is designed to present all the Godot editor icons in filterable and easy-to-browse manner.
 
+## Check It Out!
+
+[Godot Editor Icon Viewer](https://samanime.github.io/godot-editor-icon-viewer/)
+
 ## Requirements
 
 - Git 1.7.0+ (when `git sparse-checkout` was added)
