@@ -20,19 +20,22 @@ const backgroundColorElement = document.querySelector('#background-color');
 const iconTemplate = document.querySelector('#icon-template');
 const toastElement = document.querySelector('#toast');
 
-const getQueryParams = () => location.search
-  .slice(1)
-  .split('&')
-  .filter(Boolean)
-  .map(pair => pair.split('='))
-  .reduce((acc, [key, value]) =>
-    Object.assign(acc, { [key]: value === undefined ? true : value }), {});
+function getQueryParams() {
+  return location.search
+    .slice(1)
+    .split('&')
+    .filter(Boolean)
+    .map(pair => pair.split('='))
+    .reduce((acc, [key, value]) =>
+      Object.assign(acc, { [key]: value === undefined ? true : value }), {});
+}
 
-const getQueryParam = key =>
-  getQueryParams()[key];
+function getQueryParam(key) {
+  return getQueryParams()[key];
+}
 
 /** A value of undefined will remove the key. */
-const setQueryParam = (key, value) => {
+function setQueryParam(key, value) {
   const queryParams = getQueryParams();
 
   if (!value) {
@@ -44,20 +47,21 @@ const setQueryParam = (key, value) => {
   history.pushState(null, null, `${location.pathname}${toQueryString(queryParams)}`);
 }
 
-const toQueryString = queryParams =>
-  Object.keys(queryParams).length
+function toQueryString(queryParams) {
+  return Object.keys(queryParams).length
     ? `?${Object.entries(queryParams)
       .filter(([, value]) => value || value === undefined)
       .map(([key, value]) => value ? `${key}=${value}` : key)
       .join('&')}`
     : '';
+}
 
-const buildIcons = container => {
+function buildIcons() {
   iconsList.innerHTML = '';
   iconsList.append(...Object.keys(icons).map(buildIcon));
-};
+}
 
-const buildIcon = name => {
+function buildIcon(name) {
   const { path } = icons[name];
   const element = iconTemplate.content.cloneNode(true);
 
@@ -75,9 +79,9 @@ const buildIcon = name => {
   element.querySelector('.mask').style.maskImage = `url(${path})`;
 
   return element;
-};
+}
 
-const applyFilter = filter => {
+function applyFilter(filter) {
   setQueryParam('filter', filter);
   const trimmed = filter.trim().toLowerCase();
 
@@ -90,16 +94,16 @@ const applyFilter = filter => {
 
   searchInput.value = filter;
   searchInfo.textContent = `Showing ${count} of ${iconsTotal}`;
-};
+}
 
-const applyBackgroundColor = color => {
+function applyBackgroundColor(color) {
   setQueryParam(PARAM_BACKGROUND, color === DEFAULT_BACKGROUND ? undefined : color.slice(1));
 
   iconsList.style.setProperty('--background', color);
   backgroundColorElement.value = color;
-};
+}
 
-const applyColor = (overrideColor, color) => {
+function applyColor(overrideColor, color) {
   setQueryParam(PARAM_COLOR, !overrideColor ? undefined : color.slice(1));
 
   iconsList.classList.toggle('masked', overrideColor);
@@ -107,18 +111,27 @@ const applyColor = (overrideColor, color) => {
 
   colorElement.value = color;
   overrideColorElement.checked = overrideColor;
-};
+}
 
-const copyToClipboard = async text => {
+function applyVersion(version, repo, commit) {
+  const versionElement = document.querySelector('#version');
+
+  versionElement.innerHTML = versionElement.innerHTML
+    .replace('%VERSION%', version)
+    .replace('%COMMIT%', commit.substring(0, 7))
+    .replace('%COMMIT_URL%', `${repo.replace(/\.git$/, '')}/tree/${commit}`);
+}
+
+async function copyToClipboard(text) {
   await navigator.clipboard.writeText(text);
-};
+}
 
-const showToast = text => {
+function showToast(text) {
   toastElement.textContent = text;
   toastElement.classList.add('show');
 
   setTimeout(() => { toastElement.classList.remove('show'); }, 5000);
-};
+}
 
 // Initialize
 (function initialize() {
@@ -130,6 +143,7 @@ const showToast = text => {
 
   buildIcons(iconsList);
   applyFilter(getQueryParam(PARAM_FILTER) || '');
+  applyVersion(manifest.version, manifest.repo, manifest.commit);
 
   searchInput.addEventListener('input',
     ({ target: { value } }) => { applyFilter(value); });

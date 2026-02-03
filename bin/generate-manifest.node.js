@@ -1,6 +1,6 @@
 import { exec } from 'node:child_process';
-import { readdir, writeFile } from 'node:fs/promises';
-import { join, relative, basename, extname } from 'node:path';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { join, basename, extname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import packageJson from '../package.json' with { type: 'json' };
 
@@ -40,6 +40,40 @@ async function gitCheckout(gitDir, commit) {
   }
 }
 
+// This is a py file with simple declarations we'll just parse as text.
+// This will work unless they make it more complicated in the future and we need Python to parse.
+async function getGodotVersion(gitDir) {
+  const versionText = String(await readFile(join(gitDir, 'version.py')));
+  const lines = versionText.split('\n').filter(Boolean);
+  const mapped = lines.reduce((acc, line) => {
+    const [key, value] = line.split('=');
+    acc[key.trim()] = value.replace(/"/i, '').trim();
+    return acc;
+  }, {})
+
+  const { major, minor, patch } = mapped;
+
+  return `${major}.${minor}.${patch}`;
+}
+
+async function getGodotCommit(gitDir) {
+  try {
+    return (await execSync(`git rev-parse HEAD`, { cwd: gitDir }))
+      .trim();
+  } catch (ex) {
+    throw new Error(`Could not parse commit in "${gitDir}", \n${ex.stack}`);
+  }
+}
+
+async function getGodotRepo(gitDir) {
+  try {
+    return (await execSync(`git remote get-url origin`, { cwd: gitDir }))
+      .trim();
+  } catch (ex) {
+    throw new Error(`Could not parse commit in "${gitDir}", \n${ex.stack}`);
+  }
+}
+
 async function getIcons(iconsDir) {
   try {
     return await readdir(iconsDir, { recursive: true });
@@ -54,6 +88,10 @@ await gitCheckout(GIT_DIR, COMMIT)
 const files = await getIcons(ICONS_DIR);
 
 const manifest = {
+  date: new Date().toISOString(),
+  version: await getGodotVersion(GIT_DIR),
+  commit: await getGodotCommit(GIT_DIR),
+  repo: await getGodotRepo(GIT_DIR),
   icons: files.reduce((acc, file) =>
     Object.assign(acc, {
       [basename(file, extname(file))]: {
