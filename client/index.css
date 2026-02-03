@@ -177,6 +177,10 @@ header {
   padding-bottom: 0;
 }
 
+#footer {
+  text-align: center;
+}
+
 #footer ul {
   display: flex;
   justify-content: center;

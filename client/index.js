@@ -122,6 +122,25 @@ function applyVersion(version, repo, commit) {
     .replace('%COMMIT_URL%', `${repo.replace(/\.git$/, '')}/tree/${commit}`);
 }
 
+function applyLastUpdated(lastUpdated) {
+  const lastUpdatedElement = document.querySelector('#last-updated');
+
+  const date = new Date(lastUpdated);
+  const dateStr = [
+    date.getFullYear(),
+    String(date.getMonth()).padStart(2, '0'),
+    String(date.getDate()).padStart(2, '0')
+  ].join('-');
+
+  const timeStr =  [
+    String(date.getHours()).padStart(2, '0'),
+    String(date.getMinutes()).padStart(2, '0'),
+    String(date.getSeconds()).padStart(2, '0')
+  ].join(':');
+
+  lastUpdatedElement.innerHTML = lastUpdatedElement.innerHTML.replace('%LAST_UPDATED%', `${dateStr} ${timeStr}`);
+}
+
 async function copyToClipboard(text) {
   await navigator.clipboard.writeText(text);
 }
@@ -144,6 +163,7 @@ function showToast(text) {
   buildIcons(iconsList);
   applyFilter(getQueryParam(PARAM_FILTER) || '');
   applyVersion(manifest.version, manifest.repo, manifest.commit);
+  applyLastUpdated(manifest.date);
 
   searchInput.addEventListener('input',
     ({ target: { value } }) => { applyFilter(value); });
